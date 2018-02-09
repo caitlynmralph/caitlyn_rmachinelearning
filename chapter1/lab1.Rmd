@@ -164,7 +164,7 @@ hist(mpg,col=2,breaks=15)
 ```
 ```{r}
 pairs(Auto)
-pairs(~ mpg + displacement + horsepower + weight+ acceleration, Auto)
+pairs(~ mpg + displacement + horsepower + weight + acceleration, Auto)
 ```
 ```{r}
 plot(horsepower,mpg)
