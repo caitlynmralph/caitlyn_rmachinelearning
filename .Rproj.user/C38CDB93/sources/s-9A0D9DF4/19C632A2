@@ -7,13 +7,13 @@
     "folds" : "",
     "hash" : "0",
     "id" : "19C632A2",
-    "lastKnownWriteTime" : 1519141571,
-    "last_content_update" : 1519141571445,
+    "lastKnownWriteTime" : 1519143440,
+    "last_content_update" : 1519143440325,
     "path" : "~/Downloads/caitlyn_rmachinelearning/chapter3/chapter3_exercises.Rmd",
     "project_path" : "chapter3/chapter3_exercises.Rmd",
     "properties" : {
-        "cursorPosition" : "131,74",
-        "scrollLine" : "123"
+        "cursorPosition" : "131,77",
+        "scrollLine" : "127"
     },
     "relative_order" : 3,
     "source_on_save" : false,

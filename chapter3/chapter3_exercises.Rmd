@@ -129,7 +129,7 @@ Looking at the coefficients' p-values, it appears `Price` has a relationship wit
 
 3. 
 
-`Sales` = \beta0 + \beta1`Price` + \beta2`Urban` + \beta3`US` + $\epsilon$
+`Sales` = $\beta$~0~ + $\beta$~1~`Price` + $\beta$~2~`Urban` + $\beta$~3~`US` + $\epsilon$
 
 4. 
 
