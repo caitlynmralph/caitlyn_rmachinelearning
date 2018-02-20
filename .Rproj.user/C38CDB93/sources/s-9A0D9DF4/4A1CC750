@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1519137369794.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "4A1CC750",
+    "lastKnownWriteTime" : 1519100088,
+    "last_content_update" : 1519100088,
+    "path" : "~/Downloads/caitlyn_rmachinelearning/chapter3/lab2.Rmd",
+    "project_path" : "chapter3/lab2.Rmd",
+    "properties" : {
+        "cursorPosition" : "45,0",
+        "scrollLine" : "37"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
