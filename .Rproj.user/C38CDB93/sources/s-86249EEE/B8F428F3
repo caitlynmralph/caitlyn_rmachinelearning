@@ -1,21 +1,21 @@
 {
     "collab_server" : "",
     "contents" : "",
-    "created" : 1519137371351.000,
+    "created" : 1519228731616.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
-    "id" : "19C632A2",
-    "lastKnownWriteTime" : 1519143440,
-    "last_content_update" : 1519143440325,
+    "hash" : "4268602165",
+    "id" : "B8F428F3",
+    "lastKnownWriteTime" : 1519229150,
+    "last_content_update" : 1519229150081,
     "path" : "~/Downloads/caitlyn_rmachinelearning/chapter3/chapter3_exercises.Rmd",
     "project_path" : "chapter3/chapter3_exercises.Rmd",
     "properties" : {
-        "cursorPosition" : "131,77",
-        "scrollLine" : "127"
+        "cursorPosition" : "10,17",
+        "scrollLine" : "0"
     },
-    "relative_order" : 3,
+    "relative_order" : 1,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_markdown"
