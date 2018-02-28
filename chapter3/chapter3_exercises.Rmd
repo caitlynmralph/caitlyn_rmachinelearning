@@ -162,3 +162,67 @@ plot(lm.car2)
 ```
 
 Looking at the residual plot, there seems to be evidence of linearity, which means a least squares fit could be effective. The leverage plot identified point 368 as a high leverage point.
+
+------------------------------------------------------------
+
+## Collaboration Exercises
+
+### Question 11: T-Statistic
+
+```{r}
+set.seed(1)
+x=rnorm(100)
+y=2*x+rnorm(100)
+```
+
+1. 
+
+```{r}
+lm.xy = lm(y~x+0)
+summary(lm.xy)
+```
+
+The coefficient estimate: 1.9939
+Standard error of this coefficient estimate: 0.1065
+T-Statistic: 18.73
+P-Value: <2e-16
+
+Since the P-Value from the T-Statistic is nearly 0, we can safely reject the null hypothesis.
+
+2. 
+
+```{r}
+lm.yx = lm(x~y+0)
+summary(lm.yx)
+```
+
+The coefficient estimate: 0.39111
+Standard error of this coefficient estimate: 0.02089
+T-Statistic: 18.73
+P-Value: <2e-16
+
+3. The results from the linear regression of y onto x show the same T-Statistic and P-Value as the linear regression of x onto y. Expectedley, the coefficient estimate and the standard error of that estimate are different between the two regression analyses.
+
+4. 
+
+```{r}
+n=100
+((sqrt(n-1))*sum(x*y)) / (sqrt(sum(x*x) * sum(y*y)-sum(x*y)^2))
+```
+
+This is same as the T-Statistic reported above.
+
+5. Algebraically, you can see that every time x and y interact in the equation, they are being multiplied, so if you switch them, you should get the same result.
+
+6. 
+
+```{r}
+lm.xy_intercept = lm(y~x)
+summary(lm.xy_intercept)
+lm.yx_intercept = lm(x~y)
+summary(lm.yx_intercept)
+```
+
+Again, as you can see in the summary of each regression, the T-Statistic is the same for both y onto x and x onto y.
+
+### Question 14: Colinearity 
