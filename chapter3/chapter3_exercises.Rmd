@@ -2,6 +2,7 @@
 title: "Chapter 3 Applied Exercises"
 author: "Caitlyn Ralph"
 date: "2/19/2018"
+output_dir: "."
 output: 
   html_document:
     toc: true
