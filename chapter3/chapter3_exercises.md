@@ -574,3 +574,15 @@ summary(lm.yx_intercept)
 Again, as you can see in the summary of each regression, the T-Statistic is the same for both y onto x and x onto y.
 
 ### Question 14: Colinearity 
+
+1. 
+
+
+```r
+set.seed(1)
+x1=runif(100)
+x2=0.5*x1+rnorm(100)/10
+y=2+2*x1+0.3*x2+rnorm(100)
+```
+
+`y` = 2$\beta$~0~ + 2$\beta$~1~ + $\beta$~2~ + 0.3$\beta$~3~ + $\epsilon$

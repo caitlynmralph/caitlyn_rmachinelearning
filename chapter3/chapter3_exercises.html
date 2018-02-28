@@ -628,6 +628,14 @@ summary(lm.yx_intercept)</code></pre>
 </div>
 <div id="question-14-colinearity" class="section level3">
 <h3>Question 14: Colinearity</h3>
+<ol style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>set.seed(1)
+x1=runif(100)
+x2=0.5*x1+rnorm(100)/10
+y=2+2*x1+0.3*x2+rnorm(100)</code></pre>
+<p><code>y</code> = 2<span class="math inline">\(\beta\)</span><sub>0</sub> + 2<span class="math inline">\(\beta\)</span><sub>1</sub> + <span class="math inline">\(\beta\)</span><sub>2</sub> + 0.3<span class="math inline">\(\beta\)</span><sub>3</sub> + <span class="math inline">\(\epsilon\)</span></p>
 </div>
 </div>
 

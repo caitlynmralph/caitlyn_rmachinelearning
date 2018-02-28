@@ -226,3 +226,103 @@ summary(lm.yx_intercept)
 Again, as you can see in the summary of each regression, the T-Statistic is the same for both y onto x and x onto y.
 
 ### Question 14: Colinearity 
+
+1. 
+
+```{r}
+set.seed(1)
+x1=runif(100)
+x2=0.5*x1+rnorm(100)/10
+y=2+2*x1+0.3*x2+rnorm(100)
+```
+
+`y` = 2$\beta$~0~ + 2$\beta$~1~ + $\beta$~2~ + 0.3$\beta$~3~ + $\epsilon$
+
+2. 
+
+```{r}
+set.seed(1)
+x1=runif(100)
+x2=0.5*x1+rnorm(100)/10
+y=2+2*x1+0.3*x2+rnorm(100)
+plot(x1,x2)
+```
+
+There appears to be a linear and positive relationship between `x1` and `x2`.
+
+3. 
+
+```{r}
+lm.fit=lm(y~x1+x2)
+summary(lm.fit)
+```
+
+`x1` seems to have a statistically significant relationship with `y` based on the P-Value. `x2` does not. Therefore, we can reject the null hypothesis for `x1` but not for `x2`. The coefficients seem to be close to the true coefficients, but the SE is high, particularly for `x2`.
+
+4. 
+
+```{r}
+lm.fit1=lm(y~x1)
+summary(lm.fit1)
+```
+Since the P-Value is nearly 0, we can reject the null hypothesis.
+
+5. 
+
+```{r}
+lm.fit2=lm(y~x2)
+summary(lm.fit2)
+```
+
+Since the P-Value is nearly 0, we can reject the null hypothesis.
+
+6. 
+
+Yes. The results in 3 through 5 do contradict each other. In part 3, we could not reject the null hypothesis for `x2` because the P-Value was too high. However, when we performed the regression without `x1`, the P-Value was small enough to reject the null hypothesis.
+
+7. 
+
+```{r}
+x1=c(x1, 0.1)
+x2=c(x2, 0.8)
+y=c(y,6)
+lm.redo=lm(y~x1+x2)
+summary(lm.redo)
+```
+
+These additions flip the results for the multiple linear regression. In this case, the null hypothesis can be rejected for `x2` but not for `x1`.
+
+```{r}
+lm.redo1=lm(y~x1)
+summary(lm.redo1)
+```
+
+Again, we can reject the null hypothesis.
+
+```{r}
+lm.redo2=lm(y~x2)
+summary(lm.redo2)
+```
+
+Again, we can reject the null hypothesis.
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.redo)
+```
+
+The new addition seems to be a high-leverage point.
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.redo1)
+```
+
+It does not appear to be a high-leverage point here.
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.redo2)
+```
+
+It does appear to be a high-leverage point here.
