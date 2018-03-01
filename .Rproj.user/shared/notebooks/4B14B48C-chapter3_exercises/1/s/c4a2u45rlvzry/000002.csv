@@ -1,0 +1,4 @@
+"0","par(mfrow=c(2,2))"
+"0","plot(lm.fit)"
+"2","Error in x(x) : 'x' must be a matrix
+"

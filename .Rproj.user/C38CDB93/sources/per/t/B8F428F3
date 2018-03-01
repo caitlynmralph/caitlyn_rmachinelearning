@@ -5,15 +5,16 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "4268602165",
+    "hash" : "513313661",
     "id" : "B8F428F3",
-    "lastKnownWriteTime" : 1519229150,
-    "last_content_update" : 1519229150081,
+    "lastKnownWriteTime" : 1519792855,
+    "last_content_update" : 1519792855282,
     "path" : "~/Downloads/caitlyn_rmachinelearning/chapter3/chapter3_exercises.Rmd",
     "project_path" : "chapter3/chapter3_exercises.Rmd",
     "properties" : {
-        "cursorPosition" : "10,17",
-        "scrollLine" : "0"
+        "cursorPosition" : "320,0",
+        "last_setup_crc32" : "",
+        "scrollLine" : "298"
     },
     "relative_order" : 1,
     "source_on_save" : false,
