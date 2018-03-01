@@ -1,0 +1,328 @@
+---
+title: "Chapter 3 Applied Exercises"
+author: "Caitlyn Ralph"
+date: "2/19/2018"
+output_dir: "."
+output: 
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: false
+    keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 8: Simple Linear Regression on the `Auto` dataset
+
+1. 
+
+```{r}
+library(ISLR)
+attach(Auto)
+lm.auto = lm(mpg~horsepower)
+summary(lm.auto)
+```
+
+According to the p-value (< 2.2e-16), there seems to be a relationship between `mpg` and `horsepower`. Looking at the R^2^ value (0.6049), the strength of the relationship appears to be average and positive.
+
+```{r}
+predict(lm.auto,data.frame(horsepower=98), interval="confidence")
+predict(lm.auto,data.frame(horsepower=98), interval="prediction")
+```
+
+2. 
+
+```{r}
+plot(horsepower,mpg)
+abline(lm.auto,lwd=3,col="red")
+```
+
+3. 
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.auto)
+```
+
+There is some evidence of non-linearity.
+
+## Question 9: Multiple Linear Regression
+
+1. 
+
+```{r}
+pairs(Auto)
+```
+
+2. 
+
+```{r}
+cor(subset(Auto, select=-name))
+```
+
+3. 
+
+```{r}
+lm.fit=lm(mpg~.-name,data=Auto)
+summary(lm.fit)
+```
+
+According to the p-value (< 2.2e-16), there seems to be a relationship between `mpg` and the other variables. It seems displacement, weight, year, and origin have relationships with `mpg`. The year variable, in particular, suggests that the older the year, the lower the mpg. As year increases, mpg increases.
+
+4. 
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.fit)
+```
+
+There seem to be some outliers because the residual plot has a curve to it. The leverage plot does identify a point that has unusually high leverage, point 14.
+
+5. 
+
+By using the correlation matrix, I pulled out displacement + weight (` 0.9329944`) and cyliners + displacement (`0.9508233`) as the highest correlated variables. I used them for the interaction effects with mpg:
+
+```{r}
+summary(lm(mpg~displacement*weight+cylinders*displacement,data=Auto))
+```
+
+According to the resulting p-values, displacement and weight have an interaction effect, but displacement and cylinders do not.
+
+6. 
+
+Log of `mpg` and `horsepower`
+
+```{r}
+summary(lm(mpg~log(horsepower),data=Auto))
+```
+
+Sqrt of `mpg` and `horsepower`
+
+```{r}
+summary(lm(mpg~sqrt(horsepower),data=Auto))
+```
+
+Sqaured of `mpg` and `horsepower`
+
+```{r}
+summary(lm(mpg~I(horsepower^2),data=Auto))
+```
+
+Looking at the R^2^ statistic, the strongest relationship occurred with the log transformation.
+
+## Question 10: `Carseats` dataset
+
+1. 
+
+```{r}
+library(ISLR)
+attach(Carseats)
+lm.car=lm(Sales~Price+Urban+US,data=Carseats)
+summary(lm.car)
+```
+
+2. 
+
+Looking at the coefficients' p-values, it appears `Price` has a relationship with `Sales`. When `Price` is lower, `Sales` increases. It also appears `US` has a relationship with `Sales`. When the carseat is from the US, it looks like `Sales` increase.
+
+3. 
+
+`Sales` = $\beta$~0~ + $\beta$~1~`Price` + $\beta$~2~`Urban` + $\beta$~3~`US` + $\epsilon$
+
+4. 
+
+We can reject the null hypothesis for `Price` and `US`.
+
+5. 
+
+```{r}
+lm.car2=lm(Sales~Price+US,data=Carseats)
+summary(lm.car2)
+```
+
+6. 
+
+Looking at the ressidual standard error, it seems the second model only using `Price` and `US` fits the data slightly better.
+
+7. 
+
+```{r}
+confint(lm.car2)
+```
+
+8. 
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.car2)
+```
+
+Looking at the residual plot, there seems to be evidence of linearity, which means a least squares fit could be effective. The leverage plot identified point 368 as a high leverage point.
+
+------------------------------------------------------------
+
+## Collaboration Exercises
+
+### Question 11: T-Statistic
+
+```{r}
+set.seed(1)
+x=rnorm(100)
+y=2*x+rnorm(100)
+```
+
+1. 
+
+```{r}
+lm.xy = lm(y~x+0)
+summary(lm.xy)
+```
+
+The coefficient estimate: 1.9939
+Standard error of this coefficient estimate: 0.1065
+T-Statistic: 18.73
+P-Value: <2e-16
+
+Since the P-Value from the T-Statistic is nearly 0, we can safely reject the null hypothesis.
+
+2. 
+
+```{r}
+lm.yx = lm(x~y+0)
+summary(lm.yx)
+```
+
+The coefficient estimate: 0.39111
+Standard error of this coefficient estimate: 0.02089
+T-Statistic: 18.73
+P-Value: <2e-16
+
+3. The results from the linear regression of y onto x show the same T-Statistic and P-Value as the linear regression of x onto y. Expectedley, the coefficient estimate and the standard error of that estimate are different between the two regression analyses.
+
+4. 
+
+```{r}
+n=100
+((sqrt(n-1))*sum(x*y)) / (sqrt(sum(x*x) * sum(y*y)-sum(x*y)^2))
+```
+
+This is same as the T-Statistic reported above.
+
+5. Algebraically, you can see that every time x and y interact in the equation, they are being multiplied, so if you switch them, you should get the same result.
+
+6. 
+
+```{r}
+lm.xy_intercept = lm(y~x)
+summary(lm.xy_intercept)
+lm.yx_intercept = lm(x~y)
+summary(lm.yx_intercept)
+```
+
+Again, as you can see in the summary of each regression, the T-Statistic is the same for both y onto x and x onto y.
+
+### Question 14: Colinearity 
+
+1. 
+
+```{r}
+set.seed(1)
+x1=runif(100)
+x2=0.5*x1+rnorm(100)/10
+y=2+2*x1+0.3*x2+rnorm(100)
+```
+
+`y` = 2$\beta$~0~ + 2$\beta$~1~ + $\beta$~2~ + 0.3$\beta$~3~ + $\epsilon$
+
+2. 
+
+```{r}
+set.seed(1)
+x1=runif(100)
+x2=0.5*x1+rnorm(100)/10
+y=2+2*x1+0.3*x2+rnorm(100)
+plot(x1,x2)
+```
+
+There appears to be a linear and positive relationship between `x1` and `x2`.
+
+3. 
+
+```{r}
+lm.fit=lm(y~x1+x2)
+summary(lm.fit)
+```
+
+`x1` seems to have a statistically significant relationship with `y` based on the P-Value. `x2` does not. Therefore, we can reject the null hypothesis for `x1` but not for `x2`. The coefficients seem to be close to the true coefficients, but the SE is high, particularly for `x2`.
+
+4. 
+
+```{r}
+lm.fit1=lm(y~x1)
+summary(lm.fit1)
+```
+Since the P-Value is nearly 0, we can reject the null hypothesis.
+
+5. 
+
+```{r}
+lm.fit2=lm(y~x2)
+summary(lm.fit2)
+```
+
+Since the P-Value is nearly 0, we can reject the null hypothesis.
+
+6. 
+
+Yes. The results in 3 through 5 do contradict each other. In part 3, we could not reject the null hypothesis for `x2` because the P-Value was too high. However, when we performed the regression without `x1`, the P-Value was small enough to reject the null hypothesis.
+
+7. 
+
+```{r}
+x1=c(x1, 0.1)
+x2=c(x2, 0.8)
+y=c(y,6)
+lm.redo=lm(y~x1+x2)
+summary(lm.redo)
+```
+
+These additions flip the results for the multiple linear regression. In this case, the null hypothesis can be rejected for `x2` but not for `x1`.
+
+```{r}
+lm.redo1=lm(y~x1)
+summary(lm.redo1)
+```
+
+Again, we can reject the null hypothesis.
+
+```{r}
+lm.redo2=lm(y~x2)
+summary(lm.redo2)
+```
+
+Again, we can reject the null hypothesis.
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.redo)
+```
+
+The new addition seems to be a high-leverage point.
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.redo1)
+```
+
+It does not appear to be a high-leverage point here.
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.redo2)
+```
+
+It does appear to be a high-leverage point here.
