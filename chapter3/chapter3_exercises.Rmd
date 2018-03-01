@@ -6,7 +6,6 @@ output_dir: "."
 output: 
   html_document:
     toc: true
-    toc_depth: 5
     toc_float: true
     number_sections: false
     keep_md: true
