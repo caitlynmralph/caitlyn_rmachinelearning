@@ -1,0 +1,5 @@
+"0","train=(year<80)"
+"0","test = !train"
+"0","Auto.train=Auto[train,]"
+"0","Auto.test=Auto[test,]"
+"0","mpg01.test=mpg01[test]"
