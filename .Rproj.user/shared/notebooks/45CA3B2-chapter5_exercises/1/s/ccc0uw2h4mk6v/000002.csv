@@ -1,0 +1,1 @@
+"0","glm.fit1 = glm(Direction~Lag1+Lag2,data=Weekly[-1,],family=binomial)"

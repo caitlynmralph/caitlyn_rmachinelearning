@@ -1,0 +1,1 @@
+"0","glm.train = glm(default~income+balance, data=Default, family=binomial, subset=train)"

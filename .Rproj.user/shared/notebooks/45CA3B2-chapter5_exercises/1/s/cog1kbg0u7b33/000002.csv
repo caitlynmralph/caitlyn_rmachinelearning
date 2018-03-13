@@ -1,0 +1,5 @@
+"0","mean(glm.pred!=Default[-train,]$default)"
+"1","[1]"
+"1"," 0.0484"
+"1","
+"

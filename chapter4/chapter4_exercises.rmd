@@ -2,7 +2,7 @@
 title: "Chapter 4: Exercises"
 author: "Caitlyn Ralph"
 date: "3/5/2018"
-# output_dir: "."
+output_dir: "."
 output: html_document
 ---
 

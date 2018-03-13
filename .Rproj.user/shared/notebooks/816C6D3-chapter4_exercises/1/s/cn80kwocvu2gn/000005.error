@@ -1,0 +1,1 @@
+{"frames":[{"character_number":0,"end_character_number":0,"end_line_number":0,"file":"","func":"cbind(cylinders, displacement, weight)","line_number":0}],"message":"Error in cbind(cylinders, displacement, weight) : \n  object 'cylinders' not found\n"}

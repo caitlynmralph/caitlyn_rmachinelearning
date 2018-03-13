@@ -1,0 +1,3 @@
+"0","glm.probs=predict(glm.train,Default[-train],type=""response"")"
+"0","glm.pred = rep(""No"",length(glm.probs))"
+"0","glm.pred[glm.probs>0.5] = ""Yes"""

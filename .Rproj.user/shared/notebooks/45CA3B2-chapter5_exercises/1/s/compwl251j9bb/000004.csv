@@ -1,0 +1,9 @@
+"0","library(ISLR)"
+"0","attach(Default)"
+"2","The following objects are masked from Default (pos = 3):
+
+    balance, default, income, student
+
+"
+"0","set.seed(1)"
+"0","glm.fit=glm(default~income+balance, data=Default, family=binomial)"
