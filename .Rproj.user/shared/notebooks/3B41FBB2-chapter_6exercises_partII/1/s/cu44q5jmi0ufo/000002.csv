@@ -1,0 +1,8 @@
+"0","library(glmnet)"
+"0","set.seed(1)"
+"0","train <- sample(1:nrow(x),nrow(x)/2)"
+"0","test <- (-train)"
+"0","y.test <- y[test]"
+"0","set.seed(1)"
+"0","cv.out <- cv.glmnet(x[train,],y[train],alpha=1)"
+"0","plot(cv.out)"

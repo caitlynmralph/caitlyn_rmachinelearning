@@ -1,0 +1,2 @@
+"0","par(mfrow=c(2,2))"
+"0","plot(reg.summary$rss,xlab=""Number of Variables"",ylab=""RSS"",type=""l"")"

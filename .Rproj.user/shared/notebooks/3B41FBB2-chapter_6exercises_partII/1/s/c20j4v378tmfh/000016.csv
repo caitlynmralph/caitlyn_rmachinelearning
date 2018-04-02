@@ -1,0 +1,1 @@
+"0","plot(reg.summary$cp,xlab=""Number of Variables"",ylab=""Cp"",type=""l"")"

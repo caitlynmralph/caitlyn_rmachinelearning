@@ -1,0 +1,2 @@
+"0","x<-model.matrix(Y~poly(X,10,raw=T),d)[,-1]"
+"0","y<-d$Y"

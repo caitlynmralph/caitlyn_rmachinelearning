@@ -1,0 +1,2 @@
+"0","min_cp <- which.min(reg.summary$cp)"
+"0","points(min_cp, reg.summary$cp[min_cp], col=""red"",cex=2,pch=20)"

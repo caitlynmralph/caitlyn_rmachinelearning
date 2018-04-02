@@ -1,0 +1,2 @@
+"0","x<-model.matrix(Apps~.,college)[,-1]"
+"0","y<-college$Apps"

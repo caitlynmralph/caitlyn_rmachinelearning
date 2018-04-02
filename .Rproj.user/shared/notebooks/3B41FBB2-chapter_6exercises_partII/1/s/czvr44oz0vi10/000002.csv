@@ -1,0 +1,1 @@
+"0","regfit.full <- regsubsets(Y~poly(X,10,raw=T), d,nvmax=10,method=""forward"")"

@@ -1,0 +1,6 @@
+"0","lasso.pred <- predict(lasso.mod,s=bestlam,newx=x[test,])"
+"0","mean((lasso.pred-y.test)^2)"
+"1","[1]"
+"1"," 953321.5"
+"1","
+"

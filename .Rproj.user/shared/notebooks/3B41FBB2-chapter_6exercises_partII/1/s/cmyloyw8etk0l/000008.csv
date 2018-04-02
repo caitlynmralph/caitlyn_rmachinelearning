@@ -1,0 +1,6 @@
+"0","library(glmnet)"
+"0","grid=10^seq(10,-2,length=100)"
+"0","ridge.mod=glmnet(x,y,alpha=0,lambda=grid)"
+"0","set.seed(1)"
+"0","cv.out <- cv.glmnet(x[train,],y[train],alpha=0)"
+"0","plot(cv.out)"

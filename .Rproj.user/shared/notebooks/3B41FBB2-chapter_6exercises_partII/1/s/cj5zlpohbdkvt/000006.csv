@@ -1,0 +1,2 @@
+"0","max_adjr2 <- which.max(reg.summary$adjr2)"
+"0","points(max_adjr2, reg.summary$adjr2[max_adjr2], col=""red"",cex=2,pch=20)"
