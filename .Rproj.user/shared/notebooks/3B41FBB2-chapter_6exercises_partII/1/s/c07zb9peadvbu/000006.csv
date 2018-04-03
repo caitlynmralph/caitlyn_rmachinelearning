@@ -1,6 +1,0 @@
-"0","ridge.pred <- predict(ridge.mod,s=bestlam,newx=x[test,])"
-"0","mean((ridge.pred-y.test)^2)"
-"1","[1]"
-"1"," 1025306"
-"1","
-"

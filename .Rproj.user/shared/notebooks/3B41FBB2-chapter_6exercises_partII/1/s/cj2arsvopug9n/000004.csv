@@ -1,0 +1,4 @@
+"0","k <- 10"
+"0","set.seed(1)"
+"0","folds <- sample(1:k, nrow(Boston), replace=TRUE)"
+"0","cv_errors <- matrix(NA, k, 13, dimnames = list(NULL,paste(1:13)))"

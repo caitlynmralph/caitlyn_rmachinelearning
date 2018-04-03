@@ -1,0 +1,2 @@
+"0","mean_cv_errors <- colMeans(cv_errors)"
+"0","plot(mean_cv_errors,type=""b"")"

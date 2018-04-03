@@ -1,0 +1,16 @@
+"0","library(leaps)"
+"0","library(MASS)"
+"0","attach(Boston)"
+"2","The following objects are masked from Boston (pos = 3):
+
+    age, black, chas, crim, dis, indus, lstat, medv, nox, ptratio,
+    rad, rm, tax, zn
+
+"
+"2","The following objects are masked from Boston (pos = 4):
+
+    age, black, chas, crim, dis, indus, lstat, medv, nox, ptratio,
+    rad, rm, tax, zn
+
+"
+"0","regfit.full <- regsubsets(crim~.,Boston)"
