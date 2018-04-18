@@ -598,3 +598,29 @@ LIMIT 10
 18/04/11 10:35:43 INFO DAGScheduler: ResultStage 16 (collect at utils.scala:196) finished in 1.408 s
 18/04/11 10:35:43 INFO DAGScheduler: Job 10 finished: collect at utils.scala:196, took 1.433034 s
 18/04/11 10:35:43 INFO CodeGenerator: Code generated in 24.514755 ms
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned shuffle 4
+18/04/11 11:10:03 INFO BlockManagerInfo: Removed broadcast_16_piece0 on 127.0.0.1:50221 in memory (size: 12.6 KB, free: 340.5 MB)
+18/04/11 11:10:03 INFO BlockManagerInfo: Removed broadcast_11_piece0 on 127.0.0.1:50221 in memory (size: 11.7 KB, free: 340.5 MB)
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 604
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 603
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 602
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 601
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 600
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 599
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 598
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 597
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 596
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 595
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 594
+18/04/11 11:10:03 INFO ContextCleaner: Cleaned accumulator 593
+18/04/11 11:10:03 INFO BlockManagerInfo: Removed broadcast_8_piece0 on 127.0.0.1:50221 in memory (size: 11.8 KB, free: 340.5 MB)
+18/04/11 13:25:07 INFO SparkContext: Invoking stop() from shutdown hook
+18/04/11 13:25:07 INFO SparkUI: Stopped Spark web UI at http://127.0.0.1:4040
+18/04/11 13:25:07 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+18/04/11 13:25:07 INFO MemoryStore: MemoryStore cleared
+18/04/11 13:25:07 INFO BlockManager: BlockManager stopped
+18/04/11 13:25:07 INFO BlockManagerMaster: BlockManagerMaster stopped
+18/04/11 13:25:07 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+18/04/11 13:25:07 INFO SparkContext: Successfully stopped SparkContext
+18/04/11 13:25:07 INFO ShutdownHookManager: Shutdown hook called
+18/04/11 13:25:07 INFO ShutdownHookManager: Deleting directory /private/var/folders/6k/h_nq8c9j7wqgl2f6x6n680r00000gn/T/spark-988b3082-e1f1-4725-beb1-30904eac1430

@@ -480,12 +480,14 @@ for(j in 1:k) {
 mean_cv_errors <- colMeans(cv_errors)
 plot(mean_cv_errors,type="b")
 ```
+
 From our plot of cross-validation errors, it seems that a 12-variable model is ideal. Therefore, we now perform best subset selection on the full dataset.
 
 ```{r}
 final_best <- regsubsets(crim~.,data=Boston,nvmax=13)
 coef(final_best,11)
 ```
+
 Second, ridge regression with cross validation to estimate test error:
 
 ```{r}

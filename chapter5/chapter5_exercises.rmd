@@ -125,7 +125,7 @@ glm.pred[glm.probs>0.5] = "Yes"
 mean(glm.pred!=Default[-train,]$default)
 ```
 
-#### (c) Repeat the process in (b) three times, using three different splits of the observations into a training set and a validation set. Com- ment on the results obtained.
+#### (c) Repeat the process in (b) three times, using three different splits of the observations into a training set and a validation set. Comment on the results obtained.
 
 ```{r}
 train = sample(dim(Default)[1], dim(Default)[1]/2)
