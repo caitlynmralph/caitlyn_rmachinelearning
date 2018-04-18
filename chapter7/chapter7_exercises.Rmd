@@ -151,8 +151,6 @@ poly.pred <- predict(fit.poly,newx=Auto.test)
 mean((poly.pred-mpg.test)^2)
 ```
 
-So, using this Degree-4 model, it seems the test error is 87.138.
-
 Now, I'm going to try out step functions. Unlike the polynomial regression above, I'm going to instead use cross validation to choose the number of cuts (some help from Jennifer's code here).
 
 ```{r}
