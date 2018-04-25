@@ -247,14 +247,14 @@ table(tree.pred,Rating1.test)</code></pre>
 ##       Yes    0    0</code></pre>
 <pre class="r"><code>(5165+0)/17857</code></pre>
 <pre><code>## [1] 0.2892423</code></pre>
-<p>Unfortunately, I set up the code for the support vector classifier (see below), but it was taking a really long time to run (dataset too large?).</p>
+<p>Unfortunately, I set up the code for the support vector classifier (see below), but it was taking a really long time to run and R was crashing (dataset too large?).</p>
 <pre><code>set.seed(1)
 library(e1071)
 svm.fit&lt;-svm(Rating~MovieID,data=ratings.train,kernel=&quot;linear&quot;,cost=0.001,scale=FALSE)</code></pre>
 </div>
 <div id="report-and-summarize-preliminary-results-which-models-are-producing-the-lowest-test-error" class="section level2">
 <h2>5. Report and summarize preliminary results (which models are producing the lowest test error?)</h2>
-<p>While reviewing the results of these initial analyses, I’m a little concerned that the sample dataset we have derived is not showing any predictive value. The test errors for the LR, LDA, and QDA were similar, and the classification tree was only classifying correctly ~20% of the time. I’d be curious to see what happens with the KNN and potentially support vector classifier results, but, right now, I’m concluding that we may need to look into using a server, so we can run the models on more data.</p>
+<p>While reviewing the results of these initial analyses, it seems the simpler models are producing a reasonable test error. The classification tree was only classifying correctly ~20% of the time. I’d be curious to see what happens with the KNN and potentially support vector classifier results, but, right now, I’m concluding that LDA seems to be the most reasonable option for this sampled dataset.</p>
 </div>
 </div>
 
