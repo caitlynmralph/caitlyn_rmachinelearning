@@ -62,4 +62,4 @@ It appears the best cost is 1 and the best gamma is 0.5. Now time to predict!
 ```{r Predict SVM, message=FALSE, warning=FALSE}
 table(true=dat[-train,"y"],pred=predict(tune.out$best.model,newx=dat[-train,]))
 ```
-In this case, 41% of the test observations are misclassified. The non-linear decision boundary from the SVM outperformed the SVC with the linear boundary, which is expected because the data itself is non-linear.
+In this case, 44% of the test observations are misclassified. I'm confused why the SVM is being out-performed by the SVC since the data appears to have a non-linear boundary, which the SVM accounts for but the SVC does not.
