@@ -1,0 +1,220 @@
+---
+title: 'Final Project: Classification Analysis'
+author: "Caitlyn Ralph"
+date: "5/4/2018"
+output: html_document
+output_dir: "."
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Outline:
+1. Load, view, clean, and downsize the data into the final dataset.
+2. Label ratings as positive or negative in a new column.
+3. Split in between test and training data.
+4. Run models on training data and predict with test data.
+5. Report and summarize results based on classification test error
+
+```{r Libraries, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggplot2movies)
+library(MASS)
+library(class)
+library(tree)
+library(e1071)
+```
+
+## 1. Load, view, clean, and downsize the data into the final dataset.
+
+```{r Load/View/Clean/Downsize, message=FALSE, warning=FALSE}
+
+# load in 1GB ratings file (cleaned in Python so predictors are in individual columns)
+# contains data from entire `combined_data_1.txt` file
+big_data <- read_csv("ratings_1.csv")
+
+# set seed
+set.seed(1)
+
+# list of unique movie titles
+titles_list <- unique(big_data$MovieTitle)
+
+# loop through netflix prize dataset and ggplot2movies dataset and find movie titles that match
+# and are therefore contained in both
+# added check for release year to confirm the movies are the same and not remakes
+matching_movies <- c()
+for (i in 1:length(titles_list)){
+  if(titles_list[i] %in% movies$title){
+    year <- big_data[big_data$MovieTitle == titles_list[i],][1,]$`Release Year`
+    if (year == (movies[movies$title == titles_list[i],][1,]$year)){
+      matching_movies <- c(matching_movies , titles_list[i])
+    }
+  }
+}
+
+# extract matching_movies from big_data, sample 10 observations for each movie, and store in new dataset
+final_movies <- big_data %>%
+  filter(MovieTitle %in% matching_movies) %>%
+  group_by(MovieTitle) %>%
+  sample_n(10)
+
+# replace date with `weeks since first review` column
+first_review_date <- min(final_movies$Date)
+final_movies <- final_movies %>%
+  mutate(weeks_since_first = as.numeric(Date - first_review_date)/7)
+final_movies$Date <- NULL
+
+# null X1 column
+final_movies$X1 <- NULL
+
+# make CustomerID and MovieID factors
+final_movies$CustomerID <- as.factor(final_movies$CustomerID)
+final_movies$MovieID <- as.factor(final_movies$MovieID)
+
+# merge new predictors from ggplot2movies dataset with netflix prize dataset
+final_movies <- final_movies %>%
+  mutate(Length = movies[movies$title == MovieTitle,][1,]$length, IMDB_Rating = movies[movies$title == MovieTitle,][1,]$rating,
+         Action = movies[movies$title == MovieTitle,][1,]$Action, Animation = movies[movies$title == MovieTitle,][1,]$Animation,
+         Comedy = movies[movies$title == MovieTitle,][1,]$Comedy, Drama = movies[movies$title == MovieTitle,][1,]$Drama,
+         Documentary = movies[movies$title == MovieTitle,][1,]$Documentary, Romance = movies[movies$title == MovieTitle,][1,]$Romance,
+         Short = movies[movies$title == MovieTitle,][1,]$Short)
+```
+
+## 2. Label ratings as positive or negative in a new column.
+
+```{r Label Ratings, message=FALSE, warning=FALSE}
+
+# Convert all 1 and 2 ratings to "No" and convert all 3, 4, and 5 ratings to "Yes" in new Recommended column.
+
+# create Recommended column and fill with NAs
+final_movies$Recommended<-NA
+
+# set minimum rating value
+minval<-3
+final_movies$Recommended[final_movies$Rating<minval]=0
+final_movies$Recommended[final_movies$Rating>=minval]=1
+
+# convert to factor
+final_movies$Recommended <- as.factor(final_movies$Recommended)
+
+# save to CSV
+write.csv(final_movies, file = "final_movies.csv")
+```
+
+## 3. Split in between test and training data.
+
+```{r Split Training and Test Data, message=FALSE, warning=FALSE}
+
+# find how many rows are in final movies dataset
+row <- dim(final_movies)[1]
+
+# reduce number of rows
+row_smaller <- row/5
+
+# make a smaller version of the final movies dataset
+smaller_final_movies <- final_movies[1:row_smaller,]
+
+# null customerID 
+# smaller_final_movies$CustomerID<-NULL
+# smaller_final_movies$MovieID<-NULL
+# smaller_final_movies$MovieTitle<-NULL
+
+# sample half of the rows and index that sample to store training data and test data
+train <- sample(row_smaller, row_smaller/ 2)
+test <- (-train)
+
+movies_train <- smaller_final_movies[train,]
+movies_test <- smaller_final_movies[test,]
+```
+
+## 4. Run models on training data and predict with test data.
+
+Models:
+- Logistic Regression, Linear Discriminant Analysis, Quadratic Discriminant Analysis, and K-Nearest Neighbors (Chapter 4)
+- Classification Trees (Chapter 8)
+- Linear and Radial Support Vector Machines (Chapter 9)
+
+### View data
+
+```{r View Data, message=FALSE, warning=FALSE}
+
+# get a feel for the data
+summary(final_movies)
+pairs(subset(final_movies, select = c("CustomerID","Rating","MovieID","Release Year","weeks_since_first","Length","IMDB_Rating","Recommended")))
+cor(subset(final_movies, select = c("Rating","Release Year","weeks_since_first","Length","IMDB_Rating","Action","Animation","Comedy","Drama","Documentary","Romance","Short")))
+attach(final_movies)
+```
+
+### - Logistic Regression
+
+```{r Logistic Regression, message=FALSE, warning=FALSE}
+
+# generalized linear model on training data
+glm.fit <- glm(Recommended~weeks_since_first+IMDB_Rating,data=movies_train,family=binomial)
+glm.probs<-predict(glm.fit,newdata=movies_test,type="response")
+glm.pred<-rep(1,11260/2)
+glm.pred[glm.probs>0.5]=1
+mean(glm.pred != movies_test$Recommended)
+```
+
+### - Linear Discriminant Analysis (LDA) & Quadratic Discriminant Analysis (QDA)
+
+```{r LDA, message=FALSE, warning=FALSE}
+lda.fit<-lda(Recommended~weeks_since_first+IMDB_Rating,data=movies_train)
+lda.pred<-predict(lda.fit,movies_test)
+mean(lda.pred$class!=movies_test$Recommended)
+```
+
+```{r QDA, message=FALSE, warning=FALSE}
+qda.fit<-qda(Recommended~weeks_since_first+IMDB_Rating,data=movies_train)
+qda.pred<-predict(qda.fit,movies_test)
+mean(qda.pred$class!=movies_test$Recommended)
+```
+
+### - K-Nearest Neighbors (KNN) = I couldn't get this to work properly, but I already have six models in the analyses, so I decided to remove it.
+
+```{r KNN, message=FALSE, warning=FALSE}
+
+# kmn.pred<-knn(movies_train,movies_test,movies_train$Recommended,k=3)
+# table(knn.pred,movies_test$Recommended)
+```
+
+### - Classification Trees
+
+```{r Trees, message=FALSE, warning=FALSE}
+movies_train_df<-data.frame(movies_train)
+fit.tree<-tree(Recommended~weeks_since_first+IMDB_Rating+
+                 Action+Animation+Comedy+Drama+Documentary+Romance+Short,data=movies_train_df)
+summary(fit.tree)
+Recommended_test<-movies_test$Recommended
+tree.pred<-predict(fit.tree,movies_test,type="class")
+table(tree.pred,Recommended_test)
+(294+0)/1126
+```
+
+### - Support Vector Machine (SVM)
+
+```{r SVM, message=FALSE, warning=FALSE}
+
+# apply a support vector machine with a linear kernel and 0.001 cost parameter, and then view
+svmfit1<-svm(Recommended~weeks_since_first+IMDB_Rating,data=movies_train,kernel="linear",cost=0.001,scale=FALSE)
+#plot(svmfit1,movies_train)
+
+# tune the cost parameter and apply the best resulting model to predict the test data
+#tune.out1<-tune(svm,Recommended~.,data=movies_train,kernel="linear",ranges=list(cost=c(0.001,0.01,0.1,1,5,10,100)))
+#bestmod1<-tune.out1$best.model
+table(true=movies_test$Recommended,pred=predict(svmfit1,newx=movies_test))
+(294+0)/1126
+
+# apply a support vector machine with a radial kernel, a 1 cost parameter, and a 1 gamma paramter, and then view
+svmfit2<-svm(Recommended~weeks_since_first+IMDB_Rating,data=movies_train,kernel="radial",gamma=1,cost=1)
+#plot(svmfit2,movies_train)
+
+# tune the cost and gamma parameter and apply te best resulting model to predict the test data
+#tune.out2<-tune(svm,Recommended~.,data=movies_train,kernel="radial",ranges=list(cost=c(0.1,1,10,100,1000),gamma=c(0.5,1,2,3,4)))
+#summary(tune.out2)
+#bestmod2<-tune.out2$best.model
+table(true=movies_test$Recommended,pred=predict(svmfit2,newx=movies_test))
+(35+280)/1126
+```

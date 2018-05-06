@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## 4. Generate a simulated two-class data set with 100 observations and two features in which there is a visible but non-linear separation between the two classes. Show that in this setting, a support vector machine with a polynomial kernel (with degree greater than 1) or a radial kernel will outperform a support vector classifier on the training data. Which technique performs best on the test data? Make plots and report training and test error rates in order to back up your assertions.
 
 ```{r Generate Observations, message=FALSE, warning=FALSE}
-set.seed(1)
+set.seed(10)
 x<-matrix(rnorm(100*2), ncol=2)
 x[1:50,]<-x[1:50,]+2
 x[51:75,]<-x[51:75]-2
@@ -51,15 +51,15 @@ Moving on to Support Vector Machine. Fit with a radial kernel.
 ```{r SVM, message=FALSE, warning=FALSE}
 svmfit<-svm(y~.,data=dat[train,],kernel="radial",gamma=1,cost=1)
 plot(svmfit,dat[train,])
+plot(svmfit,dat[-train,])
 ```
 This is cool. It shows an apparent non-linear boundary. Now, let's tune.
 ```{r Tune SVM, message=FALSE, warning=FALSE}
-set.seed(1)
 tune.out<-tune(svm,y~.,data=dat[train,],kernel="radial",ranges=list(cost=c(0.1,1,10,100,1000),gamma=c(0.5,1,2,3,4)))
 summary(tune.out)
 ```
 It appears the best cost is 1 and the best gamma is 0.5. Now time to predict!
 ```{r Predict SVM, message=FALSE, warning=FALSE}
-table(true=dat[-train,"y"],pred=predict(tune.out$best.model,newx=dat[-train,]))
+table(true=dat[-train,"y"],pred=predict(svmfit,newx=dat[-train,]))
 ```
 In this case, 44% of the test observations are misclassified. I'm confused why the SVM is being out-performed by the SVC since the data appears to have a non-linear boundary, which the SVM accounts for but the SVC does not.

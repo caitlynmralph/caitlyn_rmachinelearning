@@ -1,0 +1,139 @@
+---
+title: "Netflix Prize Data Project: Preliminary Analyses"
+author: "Caitlyn Ralph"
+date: "4/18/2018"
+output: html_document
+output_dir: "."
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Outline:
+1. Load in and view the data.
+2. Label Ratings as positive or negative (dummy variable).
+3. Split in between test and training data.
+4. List out models that will be used and write out code to train on training set.
+5. Report and summarize preliminary results (which models are producing the lowest test error?)
+
+## 1. Load in and view the data.
+
+```{r Load/View Data, message=FALSE, warning=FALSE}
+# load library
+library(tidyverse)
+
+# load in large sample dataset
+sample_data <- read_csv("ratings_1_sample.csv")
+
+# Sample only 500 movies.
+
+# extract movieID column
+movieID <- as.vector(sample_data$MovieID)
+# get only unique movie IDs
+unique_movieID <- unique(movieID)
+# sample 500 unique movie IDs
+set.seed(1)
+movieID_sample <- sample(unique_movieID,500, replace=F)
+# new data frame, remove and store rows with movie ID in movieID_sample
+sample_data2 <- sample_data[ sample_data$MovieID %in% movieID_sample, ]
+# check number of unique movie IDs (should be 500)
+unique_movieID2 <- unique(sample_data2$MovieID)
+
+# Lastly, I'm going to drop the Date row for the time being.
+ratings <- subset(sample_data2, select = c("X1","CustomerID","Rating","MovieID","MovieTitle"))
+```
+
+## 2. Convert Ratings to categorical variable.
+
+```{r Categorical Convert, message=FALSE, warning=FALSE}
+# Convert all 1 and 2 ratings to 0 and convert all 3, 4, and 5 ratings to 1.
+
+# set minvalue
+minval<-4
+ratings$Rating[ratings$Rating<minval]=0
+ratings$Rating[ratings$Rating>=minval]=1
+```
+
+
+## 3. Split in between test and training data.
+
+```{r Test/Train Data, message=FALSE, warning=FALSE}
+train <- sample(dim(ratings)[1], dim(ratings)[1]/2)
+ratings.train <- ratings[train,]
+ratings.test <- ratings[-train,]
+rating.test <- ratings$Rating[-train]
+```
+
+## 4. List out models that will be used and write out code to train on training set.
+
+Models:
+- Logistic Regression, LDA, K-Nearest Neighbors (Chapter 4)
+- Classification Trees (Chapter 8)
+- SVM (Chapter 9)
+- Additionally, if these are not performing well, I can look into some non-linear models (Chapter 7) for classification, such as GAMs.
+
+```{r View Data, message=FALSE, warning=FALSE}
+# get a feel for the data
+summary(ratings)
+pairs(subset(sample_data2, select = c("CustomerID","Rating","MovieID")))
+cor(subset(sample_data2, select = c("CustomerID","Rating","MovieID")))
+```
+At this moment, I'm not seeing much correlation between the variables. The largest correlation I'm seeing is between MovieID and Rating.
+
+```{r Logistic Regression, message=FALSE, warning=FALSE}
+# generalized linear model on training data
+glm.fit <- glm(Rating~MovieID,data=ratings.train,family=binomial)
+glm.probs<-predict(glm.fit,newdata=ratings.test,type="response")
+glm.pred<-rep(1,17857)
+glm.pred[glm.probs>0.5]=1
+mean(glm.pred == rating.test)
+```
+
+```{r Linear Discriminant Analysis, message=FALSE, warning=FALSE}
+library(MASS)
+lda.fit<-lda(Rating~MovieID,data=ratings,subset=train)
+lda.pred<-predict(lda.fit,ratings.test)
+mean(lda.pred$class != rating.test)
+```
+
+```{r Quadratic Discriminant Analysis, message=FALSE, warning=FALSE}
+qda.fit<-qda(Rating~MovieID,data=ratings,subset=train)
+qda.pred<-predict(qda.fit,ratings.test)
+mean(qda.pred$class!=rating.test)
+```
+
+I'm having some trouble with the code below for KNN. The error is telling me that the dimensions of train.X and test.Y are different, and I'm not sure why.
+
+```
+library(class)
+train.X<-ratings$MovieID[train]
+test.X<-ratings$MovieID[-train]
+train.rating<-ratings$Rating[train]
+kmn.pred<-knn(train.X,test.X,train.rating,k=3)
+table(knn.pred,ratings$Rating)
+```
+
+```{r Classification Trees, message=FALSE, warning=FALSE}
+library(tree)
+Rating1 <- ifelse(ratings$Rating==1,"Yes","No")
+ratings<-data.frame(ratings,Rating1)
+fit.tree<-tree(Rating1~MovieID,ratings[train,])
+summary(fit.tree)
+Rating1.test<-ratings$Rating1[-train]
+tree.pred<-predict(fit.tree,ratings[-train,],type="class")
+table(tree.pred,Rating1.test)
+(5165+0)/17857
+```
+
+Unfortunately, I set up the code for the support vector classifier (see below), but it was taking a really long time to run and R was crashing (dataset too large?).
+
+```
+set.seed(1)
+library(e1071)
+svm.fit<-svm(Rating~MovieID,data=ratings.train,kernel="linear",cost=0.001,scale=FALSE)
+```
+
+## 5. Report and summarize preliminary results (which models are producing the lowest test error?)
+
+While reviewing the results of these initial analyses, it seems the simpler models are producing a reasonable test error. The classification tree was only classifying correctly ~20% of the time. I'd be curious to see what happens with the KNN and potentially support vector classifier results, but, right now, I'm concluding that LDA seems to be the most reasonable option for this sampled dataset.

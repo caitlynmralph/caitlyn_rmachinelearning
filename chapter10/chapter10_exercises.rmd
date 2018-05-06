@@ -1,0 +1,154 @@
+---
+title: "Chapter 10 Exercises"
+author: "Caitlyn Ralph"
+date: "5/5/2018"
+output: html_document
+output_dir: "."
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Conceptual Exercises
+
+## 3. In this problem, you will perform K-means clustering manually, with K = 2, on a small example with n = 6 observations and p = 2 features. The observations are as follows.
+
+```{r observations, warning=FALSE, message=FALSE}
+library(knitr)
+obs<-c(1,2,3,4,5,6)
+x1<-c(1,1,0,5,6,4)
+x2<-c(4,3,4,1,2,0)
+observations<-data.frame(obs,x1,x2)
+colnames(observations)<- c("Obs","X1","X2")
+kable(observations)
+```
+
+### (a) Plot the observations.
+
+```{r plot3, warning=FALSE, message=FALSE}
+plot(x1,x2)
+```
+
+### (b) Randomly assign a cluster label to each observation. You can use the sample() command in R to do this. Report the cluster labels for each observation.
+
+```{r random_labeling, warning=FALSE, message=FALSE}
+len <- dim(observations)[1]
+label_1<-sample(len,len/2)
+label_2<-(-label_1)
+
+observations$Labels<-NA
+observations$Labels[label_1]=1
+observations$Labels[label_2]=2
+```
+
+### (c) Compute the centroid for each cluster.
+
+```{r centroid, warning=FALSE, message=FALSE}
+c1_x1<-mean(observations$X1[label_1])
+c1_x2<-mean(observations$X2[label_1])
+c1<-c(c1_x1,c1_x2)
+
+c2_x1<-mean(observations$X1[label_2])
+c2_x2<-mean(observations$X2[label_2])
+c2<-c(c2_x1,c2_x2)
+
+plot(x1,x2)
+points(c1_x1,c1_x2,col="blue")
+points(c2_x1,c2_x2,col="red")
+```
+
+### (d) Assign each observation to the centroid to which it is closest, in terms of Euclidean distance. Report the cluster labels for each observation.
+
+```{r assign_clusters, message=FALSE, warning=FALSE}
+observations$Labels_2<-NA
+
+for (i in 1:len) {
+  c1_dist<-sqrt((c1_x1-observations$X1[i])^2 + (c1_x2-observations$X2[i])^2)
+  c2_dist<-sqrt((c2_x1-observations$X1[i])^2 + (c2_x2-observations$X2[i])^2)
+  if (c1_dist < c2_dist) {
+    observations$Labels_2[i]<-1
+  } else {
+    observations$Labels_2[i]<-2
+  }
+}
+```
+
+### (e) Repeat (c) and (d) until the answers obtained stop changing.
+
+```{r repeat, message=FALSE, warning=FALSE}
+c1_x1_3<-mean(observations$X1 == 1)
+c1_x2_3<-mean(observations$X2 == 1)
+c1_3<-c(c1_x1_3,c1_x2_3)
+
+c2_x1_3<-mean(observations$X1 == 2)
+c2_x2_3<-mean(observations$X2 == 2)
+c2_3<-c(c2_x1_3,c2_x2_3)
+
+observations$Labels_3<-NA
+
+for (i in 1:len) {
+  c1_dist<-sqrt((c1_x1_3-observations$X1[i])^2 + (c1_x2_3-observations$X2[i])^2)
+  c2_dist<-sqrt((c2_x1_3-observations$X1[i])^2 + (c2_x2_3-observations$X2[i])^2)
+  if (c1_dist < c2_dist) {
+    observations$Labels_3[i]<-1
+  } else {
+    observations$Labels_3[i]<-2
+  }
+}
+
+c1_x1_4<-mean(observations$X1 == 1)
+c1_x2_4<-mean(observations$X2 == 1)
+c1_4<-c(c1_x1_4,c1_x2_3)
+
+c2_x1_4<-mean(observations$X1 == 2)
+c2_x2_4<-mean(observations$X2 == 2)
+c2_4<-c(c2_x1_4,c2_x2_4)
+
+observations$Labels_4<-NA
+
+for (i in 1:len) {
+  c1_dist<-sqrt((c1_x1_4-observations$X1[i])^2 + (c1_x2_4-observations$X2[i])^2)
+  c2_dist<-sqrt((c2_x1_4-observations$X1[i])^2 + (c2_x2_4-observations$X2[i])^2)
+  if (c1_dist < c2_dist) {
+    observations$Labels_4[i]<-1
+  } else {
+    observations$Labels_4[i]<-2
+  }
+}
+```
+
+### (f) In your plot from (a), color the observations according to the cluster labels obtained.
+
+```{r color_plot, message=FALSE, warning=FALSE}
+plot(x1,x2,col=ifelse(observations$Labels_4 == 1,'blue','red'))
+```
+
+# Applied Exercises
+
+## 9. Consider the USArrests data. We will now perform hierarchical clustering on the states.
+
+### (a) Using hierarchical clustering with complete linkage and Euclidean distance, cluster the states.
+
+```{r hierarchical, message=FALSE, warning=FALSE}
+hc.complete<-hclust(dist(USArrests),method="complete")
+plot(hc.complete,main="Complete Linkage",xlab="",sub="",cex=.9)
+```
+
+### (b) Cut the dendrogram at a height that results in three distinct clusters. Which states belong to which clusters?
+
+```{r cut, message=FALSE, warning=FALSE}
+cutree(hc.complete,3)
+```
+
+### (c) Hierarchically cluster the states using complete linkage and Euclidean distance, after scaling the variables to have standard deviation one.
+
+```{r scaling, message=FALSE, warning=FALSE}
+xsc=scale(USArrests)
+plot(hclust(dist(xsc),method="complete"),main="Hierarchical Clustering with Scaled Features")
+cutree(hc.complete,3)
+```
+
+### (d) What effect does scaling the variables have on the hierarchical clustering obtained? In your opinion, should the variables be scaled before the inter-observation dissimilarities are computed? Provide a justification for your answer.
+
+By viewing the dendrograms of the two, it seems scaling has a significant effect on the hierarchical clustering obtained. In this case, there appears to be more diverse clusters when the variables are scaled. For example, in the scaled variable clustering, the second split is much more balanced than the unscaled variable clustering. I think the variables should be scaled because different scales can have a large effect on the Euclidean distance.
